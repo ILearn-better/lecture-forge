@@ -1,0 +1,64 @@
+# ---------------- Python ----------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ---------------- 本项目：不该进仓库的大件 ----------------
+# ffmpeg 静态包解压目录（约 120 MB，按 docs/setup.md 自行下载）
+tools/
+
+# whisper 模型（medium 约 1.5 GB）
+models/
+
+# 素材与产物
+input/
+work/
+output/
+
+# ---------------- 媒体文件（仓库只放代码和文档） ----------------
+*.mp4
+*.mkv
+*.mov
+*.avi
+*.webm
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.aac
+*.ass
+*.words.json
+translate_cache.json
+
+# ---------------- 本机配置与密钥 ----------------
+# config.yaml 里有 API key，只提交 config.example.yaml
+config.yaml
+.env
+.env.*
+secrets.json
+
+# ---------------- 编辑器 / 系统 ----------------
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 每节课的术语表，各人自建
+terms.json

@@ -1,0 +1,36 @@
+{
+  "_readme": [
+    "术语表：这是整套流水线里性价比最高的一个文件。",
+    "zh2en  : 中文术语 -> 英文标准译名。ASR 阶段当作 initial_prompt 提升识别率，翻译阶段强制约束译法。",
+    "fixups : ASR 常错写法 -> 正确写法。只写固定搭配，不要用单字替换（把'数'替换成'树'会误伤所有'数字'）。",
+    "review : 人工必须确认的词，出现即进复核清单。",
+    "控制在 200 字以内效果最好，太长反而稀释 initial_prompt 的作用。"
+  ],
+  "zh2en": {
+    "梯度提升树": "Gradient Boosting Decision Tree",
+    "随机森林": "Random Forest",
+    "决策树": "decision tree",
+    "有放回抽样": "sampling with replacement",
+    "残差": "residual",
+    "学习率": "learning rate",
+    "过拟合": "overfitting",
+    "交叉验证": "cross-validation",
+    "超参数": "hyperparameter",
+    "正则化": "regularization",
+    "早停": "early stopping",
+    "学习曲线": "learning curve",
+    "模型复杂度": "model complexity"
+  },
+  "fixups": {
+    "你和上一": "拟合上一",
+    "正则画像": "正则化项",
+    "很多颗决策树": "很多棵决策树",
+    "叠代": "迭代",
+    "剃度": "梯度",
+    "数的深度": "树的深度"
+  },
+  "review": [
+    "残差",
+    "正则化"
+  ]
+}

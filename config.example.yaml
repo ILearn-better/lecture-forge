@@ -1,0 +1,116 @@
+# ============================================================
+# LectureForge 配置样例
+# 用法：复制成 config.yaml 再改（config.yaml 已被 .gitignore 忽略）
+#   cp config.example.yaml config.yaml
+# 所有阈值都能在这里调，改完直接重跑，不用动代码
+# ============================================================
+
+paths:
+  work: "work"                 # 中间产物：音频、转写 json、翻译缓存
+  output: "output"             # 成片与字幕
+  assets: "assets"             # 字体、水印等
+  terms: "terms.json"          # 术语表（决定质量的关键文件）
+
+# ------------------------------------------------------------
+# 1. 音轨选择
+# ------------------------------------------------------------
+audio:
+  track: mic                   # mic = 第一条音轨 | mix = 全部混音 | index = 指定序号
+  track_index: 0
+  denoise:
+    enabled: true              # 降噪在转写前做，能明显抬准确率
+    highpass_hz: 80            # 去掉空调 / 桌面震动低频
+    afftdn_nr: 12              # 10~15 合适；>20 会出现"水声"伪影
+    afftdn_nf: -32             # 底噪估计：安静房间 -40，嘈杂 -25
+    rnnoise: false             # 有 assets/sh.rnnn 时可开，比 afftdn 自然
+  loudnorm:
+    enabled: true
+    i: -16                     # 目标响度 LUFS（视频平台通用）
+    tp: -1.5
+    lra: 11
+
+# ------------------------------------------------------------
+# 2. 语音转写
+# ------------------------------------------------------------
+asr:
+  model: "medium"              # CPU 上的性价比档；small 会明显掉准确率
+  compute_type: "int8"         # CPU 必须 int8 / int8_float32
+  language: "zh"
+  beam_size: 2                 # 1=最快，5=最准
+  cpu_threads: 8
+  vad_filter: true             # 跳过静音，提速 1.3~1.5x
+
+# ------------------------------------------------------------
+# 3. 字幕
+# ------------------------------------------------------------
+subtitle:
+  max_len: 18                  # 每条中文字数上限
+  max_dur: 6.5                 # 每条时长上限（秒）
+  min_dur: 1.0
+  style:                       # 1080p 基准，其他分辨率自动缩放
+    font_zh: "Microsoft YaHei"
+    font_en: "Segoe UI"
+    size_zh: 56
+    size_en: 38
+    margin_v: 60
+  translate:
+    enabled: true
+    # 任意 OpenAI 兼容接口：DeepSeek / 智谱 / 通义 / 本地 vLLM
+    api_base: "https://api.deepseek.com/v1"
+    api_key: ""                # 留空则读环境变量 LLM_API_KEY
+    model: "deepseek-chat"
+    max_chars: 78              # 英文单行上限
+    batch: 10
+
+# ------------------------------------------------------------
+# 4. 渲染
+# ------------------------------------------------------------
+render:
+  vcodec: "libx264"
+  preset: "veryfast"           # CPU 上约 1.5~2.5x 实时
+  crf: 20
+  acodec: "aac"
+  abr: "192k"
+  burn_subs: true
+
+# ------------------------------------------------------------
+# 5. 卡壳判定（v0.2 启用，当前版本尚未接上）
+# ------------------------------------------------------------
+judge:
+  breath_gap: 0.45             # 小于此值视为自然气口，不动
+  keep_hesitation: 0.35        # 判定为卡壳后保留的时长
+  keep_compress: 0.55          # 判为"存疑"后保留的时长
+  min_keep: 0.18               # 硬下限，防止切到语音
+  pad: 0.06                    # 切点离语音的最小余量
+  score_cut: 0.60
+  score_compress: 0.35
+  weights:
+    filler: 0.30
+    duration: 0.30
+    syntax: 0.20
+    restart: 0.25
+    slow_speech: 0.10
+    picture_active: -0.40      # 板书 / 翻页 → 保护
+  hard_rules:
+    silence_force_cut: 6.0
+    silence_keep: 2.0
+    picture_guard: 1.2
+  protect_words:               # 一票保留
+    - 想一想
+    - 想一下
+    - 想想
+    - 思考
+    - 你们想
+    - 大家想
+    - 算一下
+    - 看一下
+    - 试试
+    - 自己动手
+    - 有没有问题
+    - 对不对
+    - 暂停
+    - 数三下
+    - 留白
+    - 回忆一下
+    - 复习一下
+    - 标记保留

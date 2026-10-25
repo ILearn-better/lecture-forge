@@ -1,0 +1,8 @@
+# 运行依赖
+numpy>=1.24
+faster-whisper>=1.0
+opencc-python-reimplemented>=0.1.7
+pyyaml>=6.0
+
+# 可选：合成演示音频用（examples/make_demo_audio.py）
+# edge-tts>=6.1
